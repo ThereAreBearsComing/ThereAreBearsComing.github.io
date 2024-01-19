@@ -1,7 +1,7 @@
 # Stable Diffusion 初步理解
 ## SD模型基础结构原理
-
-![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/f5503d4f-47ec-4acb-be94-319206bc8b55)
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/e139fd7a-42bc-4280-a5b6-25ba56c56f15)
+<br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/f5503d4f-47ec-4acb-be94-319206bc8b55)
 
 平时正常图像存在在pixel space中， $\mathcal{E}$, $\mathcal{D}$ 为VAE。
 上半部分是训练处理（黄色方框），即将图像转到潜空间学习为各种特征向量。而使用则是下半部分，即将图像从潜空间还原到像素空间。
