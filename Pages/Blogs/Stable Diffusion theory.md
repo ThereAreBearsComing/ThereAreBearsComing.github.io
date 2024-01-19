@@ -12,6 +12,8 @@
 ![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/ca593c30-0b7e-491b-a6e1-f3fcb62f87e4)
 
 ## Clip 文本部分（Text Encoder）
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/d4377dba-367b-4e1f-bb7a-fadfc1aeb88d)
+<br> 注：大多数模型无需额外VAE，所以直接连自己即可。
 
 即为训练好的一个CV中的图像处理网络：
 <br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/a05f6e11-8e02-44f1-ae4a-d139644cb92c)
@@ -19,18 +21,39 @@
 <br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/f88b59b4-24b3-4a31-b280-8380fdfe3ac1)
 <br>Embedding模型就是在Embedding LookUp处做一个对应，于是就知道你输入的词为那个Embedding，增加准确性。
 
+首先我们要知道一件事情，自然语言，也就是平常说的话、单词什么的是无法被程序理解的。当我们用文本生成图片的时候，程序所做的第一件事情就是将 “人话” 转换为数字。
+
+这也就是 TextEncoder（文本编码器）所产生的作用了。而在 stable diffusion 中，一款非常优秀的文本编码器被选中了—— clip。（注：clip 并非只是一个文本编码器，如果感兴趣的可以去自己搜一搜）
+
+在这个文本编码器里面，会经历两个步骤。文本首先会经过 tokenize 编码变成数字，然后再送入 Text Transformer 得到生成图片的条件（condition）
+
+使用这个小工具就能看到平常输入的 tag 变成了什么样子。经过了 tokenizer 的处理，他变成了这样一串数字：
+<br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/29ed13ea-a7bf-4873-8b59-23f4504d375e)
+<br> **masterpiece, best quality, 1girl -> 12066, 267, 949, 3027, 267, 272, 1611**
+
+细心的人可能看到了，图中有个 token count，正是这串数字的个数。回到文生图界面，将tag输进去，可以看到也是同样的数字
+<br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/cc9af6d6-df06-4fcb-bbb3-58a23e85204e)
+
+<br>经历了 tokenizer 之后，就要把这串 token 送入 Text Transformer 了，来得到一个 条件（condition）。常说的 CLIP Skip 就是在这里跳过了 clip 模型 Text Transformer 部分的最后两层。最后得到的这个条件将会指导图像生成的方向。
+
+再回去想一想最开始的问题：为什么最开始 AI 有词数上限？答案是这样的：Text Transformer本身是接纳 77 个 token 的。去头去尾，77 - 2 = 75，也就是最开始的这个 “75” 的数字来源。
+
+那为什么后来支持更多的 token 了呢？那些括号又是什么呢？留个悬念，下一篇文将详细对文本编码这部分展开~
+
 ## U-Net
-![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/cbd90cf4-cbee-4147-8980-35a982e2eb62)
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/1ea46c50-badf-465e-bdf9-2a0d1233f8f4)
+<br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/cbd90cf4-cbee-4147-8980-35a982e2eb62)
 <br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/cc1f8f18-d9d3-4dd5-8227-03cf519d478e)
 <br> 此部分将潜空间的噪声图片不断降噪，不断降噪，最终生成一张目标像素的清晰图片，即生成过程中预览出可以观测到，图片的变化
 最后通过clip得到的condition就是通过cross attention与Unet结合
 
 ## VAE
-![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/a9b44d91-4358-459e-a33a-7c8a6aeeddb6)
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/791a2a87-caa1-4ab1-b1ad-a47535825ede)
+<br>![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/a9b44d91-4358-459e-a33a-7c8a6aeeddb6)
 <br>VAE就是Laten Space和Pixel Space转换的桥梁
 
-## 简易流程图
-![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/0b8f708c-391d-4b93-b333-6023c1331db6)
+## 对应ComfyUI
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/48afa623-f5b0-4bc9-8546-b157205df92e)
 
 ## 常见训练方式
 | 方式 | 原理 | 简介 |
@@ -104,8 +127,6 @@
 
 ## ContralNet基础原理
 
-## 对应ComfyUI
-![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/48afa623-f5b0-4bc9-8546-b157205df92e)
 
 ## SD文生图 webUI使用方式
 
@@ -135,5 +156,5 @@
 
 <br>随机种子是**生成过程中所有随机性的源头**每个种子都是一幅不一样的画。默认的 -1 是代表每次都换一个随机种子。由随机种子，生成了随机的噪声图，再交给AI进行画出来。
 
-
+### [更深入理解](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
 
