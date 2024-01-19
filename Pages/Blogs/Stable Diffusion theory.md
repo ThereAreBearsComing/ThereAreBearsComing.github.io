@@ -104,7 +104,8 @@
 
 ## ContralNet基础原理
 
-
+## 对应ComfyUI
+![image](https://github.com/ThereAreBearsComing/ThereAreBearsComing.github.io/assets/74708198/48afa623-f5b0-4bc9-8546-b157205df92e)
 
 
 
